@@ -41,11 +41,11 @@ impl Broadcaster {
     /// Removes all non-responsive clients from broadcast list.
     async fn remove_stale_clients(&self) {
         let clients = self.inner.lock().clients.clone();
-        println!("active client {:?}",clients);
+        println!("active client {:?}", clients);
 
         let mut ok_clients = Vec::new();
 
-        println!("okay active client {:?}",ok_clients);
+        println!("okay active client {:?}", ok_clients);
 
         for client in clients {
             if client
@@ -66,7 +66,7 @@ impl Broadcaster {
         let (tx, rx) = sse::channel(10);
 
         tx.send(sse::Data::new("connected")).await.unwrap();
-        println!("creating new clients success {:?}",tx);
+        println!("creating new clients success {:?}", tx);
         self.inner.lock().clients.push(tx);
         rx
     }
