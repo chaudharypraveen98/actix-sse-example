@@ -3,11 +3,11 @@ use actix_web::Responder;
 use actix_web::{web, App, HttpServer};
 mod broadcast;
 use self::broadcast::Broadcaster;
-use std::{io, sync::Arc};
 use actix_web_lab::extract::Path;
+use std::sync::Arc;
 
-pub struct  AppState{
-    broadcaster:Arc<Broadcaster>
+pub struct AppState {
+    broadcaster: Arc<Broadcaster>,
 }
 
 // SSE
@@ -31,14 +31,14 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
-                broadcaster: Arc::clone(&broadcaster)
+                broadcaster: Arc::clone(&broadcaster),
             }))
             // This route is used to listen events/ sse events
             .route("/events{_:/?}", web::get().to(sse_client))
             // This route will create notification
             .route("/events/{msg}", web::get().to(broadcast_msg))
     })
-    .bind(format!("{}:{}","127.0.0.1", "8000"))?
+    .bind(format!("{}:{}", "127.0.0.1", "8000"))?
     .run()
     .await
 }
